@@ -30,6 +30,7 @@ module Believer
             @configuration = load_config_from_file(config)
           end
         end
+        @connections = []
       end
 
       def logger
@@ -72,9 +73,11 @@ module Believer
         pc
       end
 
-      # The connection_pool configuration, which should be a :pool node in the configuration.
+      # The Believer configuration, which should be a :believer node in the configuration.
       def believer_configuration
-        configuration[:believer]
+        bc = configuration[:believer]
+        return DEFAULT_CONFIG[:believer] unless bc
+        bc
       end
 
       # Creates a new connection
@@ -83,11 +86,22 @@ module Believer
         if options[:connect_to_keyspace] && cc[:keyspace]
           connection = Cql::Client.connect(cc)
           connection.use(cc[:keyspace])
+          @connections << connection
         else
           cc_no_keyspace = cc.delete_if { |k, v| k.to_s == 'keyspace' }
           connection = Cql::Client.connect(cc_no_keyspace)
         end
+
         connection
+      end
+
+      def retrieve_connections
+        @connections
+      end
+
+      def reset_connections
+        @connections.each { |conn| Base.reset_connection(conn) }
+        @connections = []
       end
 
       protected

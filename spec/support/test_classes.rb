@@ -83,7 +83,11 @@ module Test
           :host => '127.0.0.1',
           :keyspace => 'believer_test_space',
           :believer => {
-              :logger => {:level => ::Logger::DEBUG}
+              :logger => nil
+          },
+          :pool => {
+            :size => 1,
+            :timeout => 1
           }
       }
     end
@@ -92,11 +96,9 @@ module Test
   def self.test_environment
     @env ||= Environment.new
   end
-
   Believer::Base.environment = test_environment
-  CLASSES = [Artist, Album, Song, AlbumStatistics, Event, Person, Child]
-  #CLASSES.each {|cl| cl.environment = test_environment}
 
+  CLASSES = [Artist, Album, Song, AlbumStatistics, Event, Person, Child]
   def self.classes
     CLASSES
   end

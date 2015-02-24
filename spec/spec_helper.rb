@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'rspec/autorun'
 require 'simplecov'
 
 unless ENV['COVERAGE'] == 'no'
@@ -15,7 +14,7 @@ require 'believer/test/database'
 
 Dir[File.expand_path('../support/*.rb', __FILE__)].each {|f| require f}
 
-#setup_database
+# Setup database
 Believer::Test::Database.setup(:environment => Test.test_environment, :classes => Test.classes)
 
 RSpec.configure do |config|
@@ -24,6 +23,7 @@ RSpec.configure do |config|
     # Enable only the `expect` sytax...
     c.syntax = :expect
   end
+  config.color     = true
+  config.formatter = :documentation
+  config.order     = :defined
 end
-
-File.expand_path('../test_files/', __FILE__)

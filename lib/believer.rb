@@ -60,7 +60,6 @@ require 'believer/insert'
 require 'believer/querying'
 require 'believer/scoping'
 require 'believer/batch'
-require 'believer/batch_delete'
 require 'believer/callbacks'
 require 'believer/finder_methods'
 

@@ -13,8 +13,7 @@ module Believer
       end
 
       def connection_pool
-        Believer::Connection::Pool.instance.connection(environment)
-        #@client_connection ||= environment.create_connection(:connect_to_keyspace => true)
+        Believer::Connection::Pool.instance.connection
       end
 
     end
@@ -22,21 +21,22 @@ module Believer
     class Pool
       include ::Singleton
 
-      # Retrieve a connection from the pool
-      # @param environment [Believer::Environment::BaseEnv] the environment with the connection configuration
-      def connection(environment)
-        unless @connection_pool
-          pool_config = environment.connection_pool_configuration
-          if pool_config.nil?
-            pool_config = {
-                :size => 1,
-                :timeout => 10
-            }
-          end
-          @connection_pool ||= ::ConnectionPool.new(pool_config) do
-            environment.create_connection(:connect_to_keyspace => true)
-          end
+      def initialize
+        env = Believer::Base.environment
+        pool_config = env.connection_pool_configuration
+        if pool_config.nil?
+          pool_config = {
+              :size => 1,
+              :timeout => 10
+          }
         end
+        @connection_pool = ConnectionPool.new(pool_config.symbolize_keys) do
+          env.create_connection(:connect_to_keyspace => true)
+        end
+      end
+
+      # Retrieve a connection from the pool
+      def connection
         @connection_pool
       end
 

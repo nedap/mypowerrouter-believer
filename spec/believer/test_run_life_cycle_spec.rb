@@ -26,7 +26,6 @@ describe Believer::Test::TestRunLifeCycle do
   end
 
   it "should clean all created objects, even after a fail" do
-    puts "Observed models: \n#{Believer::Test::TestRunLifeCycle::Destructor.instance.observed_models.join("\n")}"
     expect(Believer::Test::TestRunLifeCycle::Destructor.instance.observed_models.size).to eql Fly.create_count
   end
 
@@ -53,7 +52,6 @@ describe Believer::Test::TestRunLifeCycle do
       super
       self.class.create_count ||= 0
       self.class.create_count += 1
-      puts "Created #{self.class.create_count}"
     end
 
     before_destroy do

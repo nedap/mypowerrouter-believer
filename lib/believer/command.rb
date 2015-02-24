@@ -55,19 +55,15 @@ module Believer
       @record_class.connection_pool.with do |connection|
         cql = to_cql
         begin
-          name = "#{record_class.name} #{command_name}" if name.nil?
-          return ActiveSupport::Notifications.instrument('cql.believer', :cql => cql, :name => name) do
+          name = "#{@record_class.name} #{command_name}" if name.nil?
+          ActiveSupport::Notifications.instrument('cql.believer', :cql => cql, :name => name) do
 
-            #unless consistency_level.nil? || consistency_level.empty?
-            #  exec_opts ||= {}
-            #  exec_opts[:consistency] = consistency_level
-            #end
             exec_opts = execution_options
             begin
-              return connection.execute(cql, exec_opts)
+              connection.execute(cql, exec_opts)
             rescue Cql::NotConnectedError => not_connected
               connection.connect
-              return connection.execute(cql, exec_opts)
+              connection.execute(cql, exec_opts)
             end
           end
         rescue Cql::Protocol::DecodingError => e
