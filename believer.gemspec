@@ -33,4 +33,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '0.7.1'
   s.add_development_dependency 'rails-observers'
 
+  s.add_development_dependency 'gemfury', '~> 0'
 end

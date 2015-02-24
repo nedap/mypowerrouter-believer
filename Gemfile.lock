@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    believer (0.2.25)
+    believer (0.2.26)
       activemodel
       connection_pool
       cql-rb
@@ -23,11 +23,22 @@ GEM
     cql-rb (2.0.4)
       ione (~> 1)
     diff-lcs (1.2.5)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    gemfury (0.4.26)
+      faraday (>= 0.9.0, < 0.10.0.pre)
+      highline (~> 1.6.0)
+      multi_json (~> 1.0)
+      netrc (~> 0.7.7)
+      thor (>= 0.14.0, < 1.0.0.pre)
+    highline (1.6.21)
     i18n (0.7.0)
     ione (1.2.0)
     json (1.8.2)
     minitest (5.5.1)
     multi_json (1.10.1)
+    multipart-post (2.0.0)
+    netrc (0.7.9)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
     rake (10.4.2)
@@ -48,6 +59,7 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
+    thor (0.19.1)
     thread_safe (0.3.4)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -57,6 +69,7 @@ PLATFORMS
 
 DEPENDENCIES
   believer!
+  gemfury (~> 0)
   rails-observers
   rake
   rspec

@@ -4,3 +4,4 @@
 .idea
 believer.iml
 coverage
+*.gem
