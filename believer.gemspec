@@ -24,12 +24,12 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.required_ruby_version = '>= 1.9.2'
 
-  s.add_dependency 'activemodel'
-  s.add_dependency 'cql-rb'
+  s.add_dependency 'activemodel', '~> 4.2.0'
+  s.add_dependency 'cassandra-driver'
   s.add_dependency 'connection_pool'
 
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'rspec'
+  s.add_development_dependency 'rspec', '~> 2.9'
   s.add_development_dependency 'simplecov', '0.7.1'
   s.add_development_dependency 'rails-observers'
 
