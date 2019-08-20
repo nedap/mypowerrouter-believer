@@ -47,7 +47,7 @@ module Believer
       end
 
       # Returns the configuration. This configuration hash should contain the cql-rb client connection parameters.
-      # Optionally the connection_pool configuraton can be included in a :pool node.
+      # Optionally the connection_pool configuration can be included in a :pool node.
       def configuration
         unless @configuration
           loaded = load_configuration
@@ -63,7 +63,7 @@ module Believer
       end
 
       def connection_configuration
-        configuration.reject { |k, v| k == :pool || k == :believer }
+        configuration.reject { |k, v| k == :pool || k == :believer }.with_indifferent_access
       end
 
       # The connection_pool configuration, which should be a :pool node in the configuration.
@@ -83,16 +83,18 @@ module Believer
       # Creates a new connection
       def create_connection(options = {})
         cc = connection_configuration
+
         if options[:connect_to_keyspace] && cc[:keyspace]
-          connection = Cql::Client.connect(cc)
-          connection.use(cc[:keyspace])
-          @connections << connection
+          cluster = Cassandra.cluster cc
+          session = cluster.connect(cc[:keyspace])
+          @connections << session
         else
           cc_no_keyspace = cc.delete_if { |k, v| k.to_s == 'keyspace' }
-          connection = Cql::Client.connect(cc_no_keyspace)
+          cluster = Cassandra.cluster cc_no_keyspace
+          session = cluster.connect()
         end
 
-        connection
+        session
       end
 
       def retrieve_connections
@@ -107,9 +109,7 @@ module Believer
       protected
       def load_config_from_file(config_file)
         return nil if config_file.nil?
-        cfg = HashWithIndifferentAccess.new(YAML::load(File.open(config_file.to_s)))
-        #puts "Loaded config from file #{config_file.to_s}: #{cfg}"
-        cfg
+        HashWithIndifferentAccess.new(YAML::load(File.open(config_file.to_s)))
       end
 
     end

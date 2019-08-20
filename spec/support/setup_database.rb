@@ -7,7 +7,7 @@ def setup_database
   begin
     puts "Dropping keyspace"
     env.drop_keyspace
-  rescue Cql::QueryError
+  rescue Cassandra::Error
   end
   env.create_keyspace({}, connection)
   connection.use(env.connection_configuration[:keyspace])

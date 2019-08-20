@@ -19,11 +19,13 @@ module Believer
     end
 
     def create(properties = {})
-      conn = @environment.create_connection(:connect_to_keyspace => false)
       ks_props = DEFAULT_PROPERTIES.merge(properties)
       ks_props_s = to_cql_properties(ks_props)
       ks_def = "CREATE KEYSPACE #{name} WITH #{ks_props_s}"
-      conn.execute(ks_def)
+
+      connection = @environment.create_connection(:connect_to_keyspace => false)
+      connection.execute(ks_def)
+      connection.close
     end
 
   end

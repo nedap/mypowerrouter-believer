@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cassandra/errors'
 
 describe Believer::Connection do
 
@@ -21,10 +22,9 @@ describe Believer::Connection do
 
     conn = env.retrieve_connections.first
     allow(conn).to receive(:execute) do
-      sleep(2)
-      return Cql::TimeoutError
-    end
-
+      sleep 2
+    end.and_raise(Cassandra::Errors::TimeoutError)
+    
     begin
       Test::Artist.where(:name => 'Beatles').to_a
     rescue
