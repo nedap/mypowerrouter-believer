@@ -63,7 +63,7 @@ module Believer
       end
 
       def connection_configuration
-        configuration.reject { |k, v| k == :pool || k == :believer }.with_indifferent_access
+        configuration.reject { |k, v| k == :pool || k == :believer }.symbolize_keys
       end
 
       # The connection_pool configuration, which should be a :pool node in the configuration.
@@ -86,6 +86,9 @@ module Believer
 
         if options[:connect_to_keyspace] && cc[:keyspace]
           cluster = Cassandra.cluster cc
+          cluster.each_host do |host| # automatically discovers all peers
+            puts "Host #{host.ip}: id=#{host.id} datacenter=#{host.datacenter} rack=#{host.rack}"
+          end
           session = cluster.connect(cc[:keyspace])
           @connections << session
         else
